@@ -1,0 +1,76 @@
+/**
+Mykayla Fernandes
+2016.04.26
+*/
+
+public class KMP {
+
+	public static void main(String[] args) {
+		String search = "ABAEABBABACABACABADE"
+		String target = "ABACABAD";
+
+		System.out.println(KMP(search, target);
+
+		//generate and print out the failure table
+		int[] failTable = failureTable(target);
+		System.out.println(Arrays.toString(failTable));
+
+	}
+
+	public static int KMP(String search, String target) {
+		//generate failure table
+		int[] failTable = failureTable(target);
+
+		//signifies that we are at spot 0 in the target string, aka pointer
+		int tP = 0;
+		//signifies being at spot 0 in search string, aka pointer
+		int sP = 0;
+
+		//while there's more to be searched
+		while(sP < search.length()) {
+			if(search.charAt(sP) == target.charAt(tP)) {
+				tP++;
+				if (tP == target.length()) {
+					return sP - target.length() + 1;
+				}
+				sP++;
+			} else if (tP > 0) {
+				//fall back if there's a failure
+				//as long as there's something to fall back to...
+				tp = failTable[tP];
+			} else {
+				//this applies when you're at the beginning, aka there's nothing to fall back to
+				sP++;
+			}
+		}
+		return -1;
+	}
+
+	//failure table
+	public int[] failureTable(String target) {
+		int[] table = new int[target.length + 1];
+
+		//table at node 0 and 1 are always known
+		table[0] = -1;
+		table[1] = 0;
+
+		//pointer arrows showing where we are and where we'd restart
+		int left = 0;
+		int right = 2;
+
+		while(right < table.length) {
+			if(target.charAt(right-1) == target.charAt(left)) {
+				left++;
+				table[right] = left;
+				right++;
+			} else if (left > 0) {
+				//this is the point where you fall back to a previous pointer when there's no match
+				left = table[left];
+			} else {
+				table[right] = left;
+				right++;
+			}
+		}
+		return table;
+	}
+}
